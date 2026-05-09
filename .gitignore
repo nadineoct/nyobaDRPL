@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.log
+.env
+venv/
+.venv/
+dist/
+build/
+*.egg-info/
+assets/fonts/*.ttf
