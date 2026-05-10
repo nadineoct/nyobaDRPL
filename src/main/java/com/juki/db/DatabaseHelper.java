@@ -19,6 +19,7 @@ public class DatabaseHelper {
             dir.mkdirs();
         }
 
+
         String sqlUserTable = "CREATE TABLE IF NOT EXISTS User (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "full_name TEXT NOT NULL," +
