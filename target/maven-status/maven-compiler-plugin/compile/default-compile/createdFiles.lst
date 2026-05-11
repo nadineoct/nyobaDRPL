@@ -1,7 +1,13 @@
 com/juki/view/EntryListView.class
+com/juki/controller/EntryController.class
+com/juki/model/Photo.class
+com/juki/model/User.class
+com/juki/model/JournalEntry.class
 com/juki/controller/RegistrationFormController.class
 com/juki/view/EntryFormView.class
 com/juki/controller/AnalyticsController.class
+com/juki/db/DatabaseHelper.class
+com/juki/model/SearchFilter.class
 com/juki/view/VisualizerView.class
 com/juki/model/SelfCareGoal.class
 com/juki/MainApp.class
