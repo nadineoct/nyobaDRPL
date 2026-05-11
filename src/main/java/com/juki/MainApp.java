@@ -69,7 +69,7 @@ public class MainApp extends Application {
         
         Label navBeranda = new Label("Beranda");
         navBeranda.setTextFill(Color.web("#FDF3FF"));
-        navBeranda.setFont(Font.font("Outfit", FontWeight.SEMI_BOLD, 25));
+        navBeranda.setFont(Font.font("Outfit", FontWeight.BOLD, 25));
         navBeranda.setStyle("-fx-cursor: hand;");
 
         Label navJurnal = new Label("Jurnal");
