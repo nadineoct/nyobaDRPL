@@ -10,6 +10,7 @@ com/juki/db/DatabaseHelper.class
 com/juki/model/SearchFilter.class
 com/juki/view/VisualizerView.class
 com/juki/model/SelfCareGoal.class
+com/juki/controller/ProfileManager.class
 com/juki/MainApp.class
 com/juki/view/SearchView.class
 com/juki/view/DashboardView.class
