@@ -178,6 +178,7 @@ public class DashboardView {
 
     private VBox createMoodGraphWidget(List<JournalEntry> entries) {
         VBox container = new VBox(8);
+        container.setPrefHeight(333); // Agar Graph (333) + Streak (137) + Spacing (10) = 480px
         container.setPadding(new Insets(28));
         container.setStyle("-fx-background-color: white; -fx-border-color: #D6D6D6; -fx-border-radius: 20px; -fx-background-radius: 20px;");
         
@@ -258,8 +259,8 @@ public class DashboardView {
     }
 
     private VBox createCalendarWidget() {
-        VBox container = new VBox(40);
-        container.setPrefSize(500, 500);
+        VBox container = new VBox(24);
+        container.setPrefSize(500, 480);
         container.setPadding(new Insets(28));
         container.setStyle("-fx-background-color: white; -fx-border-color: #D6D6D6; -fx-border-radius: 20px; -fx-background-radius: 20px;");
         container.setAlignment(Pos.TOP_CENTER);
@@ -273,7 +274,7 @@ public class DashboardView {
         btnPrev.setStyle("-fx-cursor: hand;");
         
         Region s1 = new Region(); HBox.setHgrow(s1, Priority.ALWAYS);
-        Label monthLabel = new Label(LocalDate.now().getMonth().getDisplayName(java.time.format.TextStyle.FULL, new Locale("id", "ID")));
+        Label monthLabel = new Label();
         monthLabel.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
         Region s2 = new Region(); HBox.setHgrow(s2, Priority.ALWAYS);
         
@@ -285,48 +286,85 @@ public class DashboardView {
         header.getChildren().addAll(btnPrev, s1, monthLabel, s2, btnNext);
 
         GridPane grid = new GridPane();
-        grid.setHgap(32);
-        grid.setVgap(40);
+        grid.setHgap(20);
+        grid.setVgap(16); // Diperkecil agar kalender tidak terlalu memakan tempat
         grid.setAlignment(Pos.CENTER);
 
-        String[] headers = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
-        for (int i = 0; i < 7; i++) {
-            Label h = new Label(headers[i]);
-            h.setFont(Font.font("Montserrat", FontWeight.MEDIUM, 16));
-            h.setTextFill(Color.web("#767676"));
-            grid.add(h, i, 0);
-        }
+        // State untuk melacak bulan yang sedang dilihat
+        LocalDate[] currentMonth = { LocalDate.now().withDayOfMonth(1) };
 
-        LocalDate firstOfMonth = LocalDate.now().withDayOfMonth(1);
-        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue() % 7;
-        int daysInMonth = firstOfMonth.lengthOfMonth();
+        Runnable updateCalendar = () -> {
+            grid.getChildren().clear(); // Bersihkan kalender lama
+            
+            // Tambahkan tahun ke label agar user tahu mereka ada di tahun berapa
+            String monthName = currentMonth[0].getMonth().getDisplayName(java.time.format.TextStyle.FULL, new Locale("id", "ID"));
+            monthLabel.setText(monthName + " " + currentMonth[0].getYear());
 
-        int day = 1;
-        for (int row = 1; row <= 6; row++) {
-            for (int col = 0; col < 7; col++) {
-                if (row == 1 && col < dayOfWeek) continue;
-                if (day <= daysInMonth) {
-                    Label d = new Label(String.valueOf(day));
-                    d.setFont(Font.font("Montserrat", FontWeight.NORMAL, 20));
-                    d.setTextFill(day == LocalDate.now().getDayOfMonth() ? Color.web("#8D1395") : Color.web("#434343"));
-                    if (day == LocalDate.now().getDayOfMonth()) d.setFont(Font.font("Montserrat", FontWeight.BOLD, 20));
-                    d.setMinWidth(40);
-                    d.setAlignment(Pos.CENTER);
-                    grid.add(d, col, row);
-                    day++;
+            String[] headers = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+            for (int i = 0; i < 7; i++) {
+                Label h = new Label(headers[i]);
+                h.setFont(Font.font("Montserrat", FontWeight.MEDIUM, 16));
+                h.setTextFill(Color.web("#767676"));
+                grid.add(h, i, 0);
+            }
+
+            int dayOfWeek = currentMonth[0].getDayOfWeek().getValue() % 7;
+            int daysInMonth = currentMonth[0].lengthOfMonth();
+            
+            LocalDate today = LocalDate.now();
+            boolean isCurrentMonth = (today.getYear() == currentMonth[0].getYear() && today.getMonth() == currentMonth[0].getMonth());
+
+            int day = 1;
+            for (int row = 1; row <= 6; row++) {
+                for (int col = 0; col < 7; col++) {
+                    if (row == 1 && col < dayOfWeek) continue;
+                    if (day <= daysInMonth) {
+                        StackPane cell = new StackPane();
+                        cell.setMinWidth(40);
+                        cell.setAlignment(Pos.CENTER);
+
+                        Label d = new Label(String.valueOf(day));
+                        d.setFont(Font.font("Montserrat", FontWeight.NORMAL, 20));
+                        
+                        if (isCurrentMonth && day == today.getDayOfMonth()) {
+                            d.setTextFill(Color.WHITE);
+                            d.setFont(Font.font("Montserrat", FontWeight.BOLD, 20));
+                            Circle bg = new Circle(20, Color.web("#8D1395"));
+                            cell.getChildren().addAll(bg, d);
+                        } else {
+                            d.setTextFill(Color.web("#434343"));
+                            cell.getChildren().add(d);
+                        }
+                        
+                        grid.add(cell, col, row);
+                        day++;
+                    }
                 }
             }
-        }
+        };
+
+        btnPrev.setOnMouseClicked(e -> {
+            currentMonth[0] = currentMonth[0].minusMonths(1);
+            updateCalendar.run();
+        });
+
+        btnNext.setOnMouseClicked(e -> {
+            currentMonth[0] = currentMonth[0].plusMonths(1);
+            updateCalendar.run();
+        });
+
+        // Render kalender untuk pertama kali
+        updateCalendar.run();
 
         container.getChildren().addAll(header, grid);
         return container;
     }
 
     private VBox createMoodSelectorWidget() {
-        VBox container = new VBox(32);
+        VBox container = new VBox(24);
         container.setPadding(new Insets(28, 32, 28, 32));
         container.setStyle("-fx-background-color: white; -fx-border-color: #D6D6D6; -fx-border-radius: 20px; -fx-background-radius: 20px;");
-        container.setPrefWidth(500);
+        container.setPrefSize(500, 480); // Samakan dengan kotak kalender
         container.setAlignment(Pos.TOP_LEFT);
 
         VBox titleArea = new VBox(4);
@@ -430,7 +468,10 @@ public class DashboardView {
             }
         });
         
-        container.getChildren().addAll(titleArea, moodSelection, btnCatat);
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS); // Mendorong tombol catat ke dasar kotak
+        
+        container.getChildren().addAll(titleArea, moodSelection, spacer, btnCatat);
         return container;
     }
 
