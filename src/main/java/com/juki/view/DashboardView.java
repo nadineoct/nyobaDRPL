@@ -109,28 +109,21 @@ public class DashboardView {
 
         // Streak Day Count
         VBox streakCount = new VBox(0);
-        streakCount.setPrefWidth(95);
         streakCount.setAlignment(Pos.CENTER);
         
-        AnchorPane streakIcon = new AnchorPane();
-        streakIcon.setPrefSize(147.69, 75.56);
+        HBox streakIcon = new HBox(8); // Agar sejajar ke samping dengan jarak 8px
+        streakIcon.setAlignment(Pos.CENTER);
         
         ImageView fireImage = new ImageView(new Image("file:img/beranda/streak_fire.png"));
         fireImage.setFitWidth(42.15);
         fireImage.setFitHeight(60.45);
         fireImage.setPreserveRatio(true);
-        // Absolute positioning for fire icon from HTML: left: 74.27px; top: 7.56px
-        AnchorPane.setLeftAnchor(fireImage, 74.27);
-        AnchorPane.setTopAnchor(fireImage, 7.56);
         
         Label dayLabel = new Label(String.valueOf(streakCountVal));
         dayLabel.setFont(Font.font("Outfit", FontWeight.MEDIUM, 50));
         dayLabel.setTextFill(Color.web("#292929"));
-        // Absolute positioning from HTML: left: 33px; top: 12.56px
-        AnchorPane.setLeftAnchor(dayLabel, 33.0);
-        AnchorPane.setTopAnchor(dayLabel, 12.56);
         
-        streakIcon.getChildren().addAll(fireImage, dayLabel);
+        streakIcon.getChildren().addAll(dayLabel, fireImage);
         
         Label streakText = new Label("day streak");
         streakText.setFont(Font.font("Outfit", FontWeight.MEDIUM, 20));
@@ -155,18 +148,25 @@ public class DashboardView {
             
             VBox dayCol = new VBox(4);
             dayCol.setAlignment(Pos.CENTER);
+            
+            StackPane dotPane = new StackPane();
             Circle dot = new Circle(12);
             if (hasEntry) {
                 dot.setFill(Color.web("#82DD55"));
+                Label check = new Label("✔");
+                check.setTextFill(Color.WHITE);
+                check.setFont(Font.font("System", FontWeight.BOLD, 14));
+                dotPane.getChildren().addAll(dot, check);
             } else {
                 dot.setFill(Color.TRANSPARENT);
                 dot.setStroke(Color.web("#82DD55"));
                 dot.setStrokeWidth(1.6);
+                dotPane.getChildren().add(dot);
             }
             Label dayChar = new Label(days[d.getDayOfWeek().getValue() % 7]);
             dayChar.setFont(Font.font("Plus Jakarta Sans", FontWeight.SEMI_BOLD, 16));
             dayChar.setTextFill(Color.web("#434343"));
-            dayCol.getChildren().addAll(dot, dayChar);
+            dayCol.getChildren().addAll(dotPane, dayChar);
             daysRow.getChildren().add(dayCol);
         }
         
