@@ -27,6 +27,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DashboardView {
 
@@ -334,7 +336,26 @@ public class DashboardView {
         Label subtitle = new Label("Pilih emosi yang paling mewakilimu saat ini!");
         subtitle.setFont(Font.font("Outfit", FontWeight.LIGHT, 20));
         subtitle.setTextFill(Color.web("#434343"));
+        subtitle.setWrapText(true);
+        subtitle.setMinHeight(Region.USE_PREF_SIZE);
         titleArea.getChildren().addAll(title, subtitle);
+
+        // Daftar nama file gambar sesuai yang kamu request
+        ArrayList<String> fileNames = new ArrayList<>(Arrays.asList(
+            "angry.png", "bored.png", "confused.png", "excited.png", 
+            "guilty.png", "hurt.png", "hyperactive.png", "insecure.png", 
+            "joyful.png", "sensitive.png", "stressed.png", "tired.png"
+        ));
+        
+        // Daftar label teks emosi untuk ditampilkan di bawah gambar
+        ArrayList<String> moodNames = new ArrayList<>(Arrays.asList(
+            "Angry", "Bored", "Confused", "Excited", 
+            "Guilty", "Hurt", "Hyperactive", "Insecure", 
+            "Joyful", "Sensitive", "Stressed", "Tired"
+        ));
+        
+        // Menggunakan array untuk currentIndex agar nilainya bisa diubah di dalam fungsi click (lambda)
+        int[] currentIndex = {3}; // Kita mulai dari indeks 3 ("excited.png") agar sama dengan UI bawaanmu
 
         VBox moodSelection = new VBox(8);
         moodSelection.setAlignment(Pos.CENTER);
@@ -346,23 +367,43 @@ public class DashboardView {
         ImageView btnLeft = new ImageView(new Image("file:img/icons/arrow-left.png"));
         btnLeft.setFitWidth(32);
         btnLeft.setPreserveRatio(true);
-        btnLeft.setStyle("-fx-cursor: hand; -fx-opacity: 0.5;"); // Greyed out for now
+        btnLeft.setStyle("-fx-cursor: hand;");
         
-        ImageView moodImg = new ImageView(new Image("file:img/emotions/excited.png"));
+        ImageView moodImg = new ImageView(new Image("file:img/emotions/" + fileNames.get(currentIndex[0])));
         moodImg.setFitWidth(150);
         moodImg.setPreserveRatio(true);
         
         ImageView btnRight = new ImageView(new Image("file:img/icons/arrow-right.png"));
         btnRight.setFitWidth(32);
         btnRight.setPreserveRatio(true);
-        btnRight.setStyle("-fx-cursor: hand; -fx-opacity: 0.5;"); // Greyed out for now
+        btnRight.setStyle("-fx-cursor: hand;");
         
         selector.getChildren().addAll(btnLeft, moodImg, btnRight);
         
-        Label moodName = new Label("Excited");
+        Label moodName = new Label(moodNames.get(currentIndex[0]));
         moodName.setFont(Font.font("Outfit", FontWeight.MEDIUM, 30));
         moodName.setTextFill(Color.web("#292929"));
         moodSelection.getChildren().addAll(selector, moodName);
+
+        // Logika Loop Prev (Ke Kiri)
+        btnLeft.setOnMouseClicked(e -> {
+            currentIndex[0]--;
+            if (currentIndex[0] < 0) {
+                currentIndex[0] = fileNames.size() - 1; // Balik ke gambar terakhir
+            }
+            moodImg.setImage(new Image("file:img/emotions/" + fileNames.get(currentIndex[0])));
+            moodName.setText(moodNames.get(currentIndex[0]));
+        });
+
+        // Logika Loop Next (Ke Kanan)
+        btnRight.setOnMouseClicked(e -> {
+            currentIndex[0]++;
+            if (currentIndex[0] >= fileNames.size()) {
+                currentIndex[0] = 0; // Balik ke gambar pertama
+            }
+            moodImg.setImage(new Image("file:img/emotions/" + fileNames.get(currentIndex[0])));
+            moodName.setText(moodNames.get(currentIndex[0]));
+        });
 
         Button btnCatat = new Button("Catat");
         try {
