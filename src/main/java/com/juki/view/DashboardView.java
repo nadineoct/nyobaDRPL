@@ -330,7 +330,7 @@ public class DashboardView {
                         if (isCurrentMonth && day == today.getDayOfMonth()) {
                             d.setTextFill(Color.WHITE);
                             d.setFont(Font.font("Montserrat", FontWeight.BOLD, 20));
-                            Circle bg = new Circle(20, Color.web("#F6CEFF"));
+                            Circle bg = new Circle(20, Color.web("#F1B900"));
                             cell.getChildren().addAll(bg, d);
                         } else {
                             d.setTextFill(Color.web("#434343"));

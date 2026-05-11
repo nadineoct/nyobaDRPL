@@ -4,6 +4,7 @@ import com.juki.controller.RegistrationFormController;
 import com.juki.db.DatabaseHelper;
 import com.juki.model.User;
 import com.juki.view.DashboardView;
+import com.juki.view.CalendarView;
 import com.juki.view.EntryFormView;
 import com.juki.view.EntryListView;
 import com.juki.view.RegistrationFormView;
@@ -80,6 +81,7 @@ public class MainApp extends Application {
         Label navKalendar = new Label("Kalendar");
         navKalendar.setTextFill(Color.web("#F2F6FC"));
         navKalendar.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
+        navKalendar.setStyle("-fx-cursor: hand;");
         
         Button btnTulis = new Button("Tulis Jurnal");
         try {
@@ -106,6 +108,7 @@ public class MainApp extends Application {
         navBeranda.setOnMouseClicked(e -> {
             navBeranda.setFont(Font.font("Outfit", FontWeight.BOLD, 25));
             navJurnal.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
+            navKalendar.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
             DashboardView dashboardView = new DashboardView();
             root.setCenter(dashboardView.getDashboardView(user, root));
         });
@@ -113,18 +116,29 @@ public class MainApp extends Application {
         navJurnal.setOnMouseClicked(e -> {
             navJurnal.setFont(Font.font("Outfit", FontWeight.BOLD, 25));
             navBeranda.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
+            navKalendar.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
             EntryListView entryListView = new EntryListView(user);
             root.setCenter(entryListView.getView());
         });
         
+        navKalendar.setOnMouseClicked(e -> {
+            navKalendar.setFont(Font.font("Outfit", FontWeight.BOLD, 25));
+            navBeranda.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
+            navJurnal.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
+            CalendarView calendarView = new CalendarView(user);
+            root.setCenter(calendarView.getView());
+        });
+
         btnTulis.setOnAction(e -> {
             navBeranda.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
             navJurnal.setFont(Font.font("Outfit", FontWeight.BOLD, 25)); // Set aktif di Jurnal
+            navKalendar.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
             
             EntryFormView entryFormView = new EntryFormView(user, () -> {
                 // Aksi saat jurnal berhasil diposting (Kembali ke List)
                 navJurnal.setFont(Font.font("Outfit", FontWeight.BOLD, 25));
                 navBeranda.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
+                navKalendar.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
                 EntryListView entryListView = new EntryListView(user);
                 root.setCenter(entryListView.getView());
             });
