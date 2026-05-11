@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import com.juki.utils.DesignSystem;
 import java.util.List;
 
 public class EntryListView {
@@ -27,7 +28,7 @@ public class EntryListView {
         
         Label title = new Label("Riwayat Jurnal Kamu \uD83D\uDCD6");
         title.setFont(Font.font("Outfit", FontWeight.BOLD, 40));
-        title.setTextFill(Color.web("#8D1395"));
+        title.setTextFill(DesignSystem.getViolet(800));
 
         listContainer = new VBox(20);
         
@@ -39,7 +40,7 @@ public class EntryListView {
     public ScrollPane getView() {
         ScrollPane scrollPane = new ScrollPane(view);
         scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: #FDF3FF;");
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: " + DesignSystem.VIOLET_50 + ";");
         return scrollPane;
     }
 
@@ -65,7 +66,7 @@ public class EntryListView {
 
             Label titleLbl = new Label(entry.getTitle() != null ? entry.getTitle() : "Tanpa Judul");
             titleLbl.setFont(Font.font("Outfit", FontWeight.BOLD, 22));
-            titleLbl.setTextFill(Color.web("#74400F"));
+            titleLbl.setTextFill(DesignSystem.getLemon(900));
 
             card.getChildren().addAll(dateLbl, titleLbl);
             card.setOnMouseClicked(e -> selectEntry(entry.getId()));

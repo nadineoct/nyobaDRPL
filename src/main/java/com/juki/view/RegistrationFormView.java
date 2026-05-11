@@ -2,6 +2,7 @@ package com.juki.view;
 
 import com.juki.controller.RegistrationFormController;
 import com.juki.model.User;
+import com.juki.utils.DesignSystem;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,7 +25,7 @@ public class RegistrationFormView {
         
         view = new VBox(20);
         view.setAlignment(Pos.CENTER);
-        view.setStyle("-fx-background-color: #FDF3FF;");
+        view.setStyle("-fx-background-color: " + DesignSystem.VIOLET_50 + ";");
 
         showSignInPage();
     }
@@ -36,7 +37,7 @@ public class RegistrationFormView {
 
         Label title = new Label("Sign In");
         title.setFont(Font.font("Outfit", FontWeight.BOLD, 40));
-        title.setStyle("-fx-text-fill: #8D1395;");
+        title.setStyle("-fx-text-fill: " + DesignSystem.VIOLET_800 + ";");
 
         TextField usernameField = createTextField("Username");
         PasswordField passwordField = createPasswordField("Password");
@@ -62,7 +63,7 @@ public class RegistrationFormView {
         });
 
         Label switchLink = new Label("Belum punya akun? Sign Up di sini.");
-        switchLink.setStyle("-fx-text-fill: #8D1395; -fx-cursor: hand; -fx-underline: true;");
+        switchLink.setStyle("-fx-text-fill: " + DesignSystem.VIOLET_800 + "; -fx-cursor: hand; -fx-underline: true;");
         switchLink.setOnMouseClicked(e -> showSignUpPage());
 
         view.getChildren().addAll(title, usernameField, passwordField, errorLabel, loginButton, switchLink);
@@ -73,7 +74,7 @@ public class RegistrationFormView {
 
         Label title = new Label("Sign Up");
         title.setFont(Font.font("Outfit", FontWeight.BOLD, 40));
-        title.setStyle("-fx-text-fill: #8D1395;");
+        title.setStyle("-fx-text-fill: " + DesignSystem.VIOLET_800 + ";");
 
         TextField nameField = createTextField("Nama Lengkap");
         TextField usernameField = createTextField("Username");
@@ -108,7 +109,7 @@ public class RegistrationFormView {
         });
 
         Label switchLink = new Label("Sudah punya akun? Sign In di sini.");
-        switchLink.setStyle("-fx-text-fill: #8D1395; -fx-cursor: hand; -fx-underline: true;");
+        switchLink.setStyle("-fx-text-fill: " + DesignSystem.VIOLET_800 + "; -fx-cursor: hand; -fx-underline: true;");
         switchLink.setOnMouseClicked(e -> showSignInPage());
 
         view.getChildren().addAll(title, nameField, usernameField, passwordField, confirmPasswordField, errorLabel, registerButton, switchLink);
@@ -132,7 +133,7 @@ public class RegistrationFormView {
     
     private Button createButton(String text) {
         Button btn = new Button(text);
-        btn.setStyle("-fx-background-color: #8D1395; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10px 50px; -fx-background-radius: 10px; -fx-cursor: hand;");
+        btn.setStyle("-fx-background-color: " + DesignSystem.VIOLET_800 + "; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10px 50px; -fx-background-radius: 10px; -fx-cursor: hand;");
         return btn;
     }
 }

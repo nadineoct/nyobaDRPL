@@ -3,14 +3,19 @@ package com.juki.view;
 import com.juki.controller.EntryController;
 import com.juki.model.JournalEntry;
 import com.juki.model.User;
+import com.juki.utils.DesignSystem;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Locale;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -34,149 +39,182 @@ public class EntryFormView {
         // ==========================================
         // 1. TOP NAVIGATION BAR (Header)
         // ==========================================
-        HBox navBar = new HBox(20);
-        navBar.setStyle("-fx-background-color: #8D1395; -fx-padding: 15px 50px;");
+        HBox navBar = new HBox(32);
+        navBar.setStyle("-fx-background-color: #A114AC; -fx-padding: 42px 100px;");
         navBar.setAlignment(Pos.CENTER_LEFT);
 
-        Label logo = new Label("JuKi");
-        logo.setTextFill(Color.WHITE);
-        logo.setFont(Font.font("System", FontWeight.BOLD, 36));
+        HBox logoBox = new HBox(32);
+        logoBox.setAlignment(Pos.CENTER_LEFT);
+        Label logoLabel = new Label("JuK");
+        logoLabel.setTextFill(Color.WHITE);
+        logoLabel.setFont(Font.font("Outfit", FontWeight.BOLD, 50));
+        Rectangle logoBar = new Rectangle(7, 35, Color.WHITE);
+        logoBox.getChildren().addAll(logoLabel, logoBar);
+
+        HBox searchContainer = new HBox(10);
+        searchContainer.setAlignment(Pos.CENTER_LEFT);
+        searchContainer.setStyle("-fx-background-color: white; -fx-background-radius: 100px; -fx-padding: 16px 32px; -fx-border-color: #D6D6D6; -fx-border-radius: 100px;");
+        searchContainer.setPrefWidth(581);
+        
+        ImageView searchIcon = new ImageView(new Image("file:img/icons/more.png")); // Placeholder for search icon
+        searchIcon.setFitWidth(32);
+        searchIcon.setFitHeight(32);
+        javafx.scene.effect.ColorAdjust searchIconColor = new javafx.scene.effect.ColorAdjust();
+        searchIconColor.setBrightness(0.65); // #A5A5A5
+        searchIcon.setEffect(searchIconColor);
 
         TextField searchBar = new TextField();
         searchBar.setPromptText("Cari Jurnal");
-        searchBar.setStyle("-fx-background-color: white; -fx-background-radius: 20px; -fx-padding: 8px 15px;");
-        searchBar.setPrefWidth(250);
+        searchBar.setStyle("-fx-background-color: transparent; -fx-prompt-text-fill: rgba(0,0,0,0.20); -fx-font-family: 'Outfit'; -fx-font-size: 22px; -fx-font-weight: 300;");
+        HBox.setHgrow(searchBar, Priority.ALWAYS);
+        searchContainer.getChildren().addAll(searchIcon, searchBar);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        HBox navLinks = new HBox(30);
+        HBox navLinks = new HBox(64);
         navLinks.setAlignment(Pos.CENTER);
         
         Label navBeranda = new Label("Beranda");
-        navBeranda.setTextFill(Color.WHITE);
-        navBeranda.setFont(Font.font("System", FontWeight.NORMAL, 16));
+        navBeranda.setTextFill(Color.web("#F2F6FC"));
+        navBeranda.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
         
         Label navJurnal = new Label("Jurnal");
-        navJurnal.setTextFill(Color.WHITE);
-        navJurnal.setFont(Font.font("System", FontWeight.BOLD, 16)); // Penanda aktif
+        navJurnal.setTextFill(Color.web("#F2F6FC"));
+        navJurnal.setFont(Font.font("Outfit", FontWeight.BOLD, 25)); // Penanda aktif
         
         Label navKalender = new Label("Kalender");
-        navKalender.setTextFill(Color.WHITE);
-        navKalender.setFont(Font.font("System", FontWeight.NORMAL, 16));
+        navKalender.setTextFill(Color.web("#F2F6FC"));
+        navKalender.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
 
         Button btnTulis = new Button("Tulis Jurnal");
-        btnTulis.setStyle("-fx-background-color: white; -fx-text-fill: #8D1395; -fx-font-weight: bold; -fx-background-radius: 20px; -fx-padding: 10px 25px; -fx-cursor: hand;");
+        btnTulis.setStyle("-fx-background-color: white; -fx-text-fill: #A114AC; -fx-font-family: 'Outfit'; -fx-font-size: 25px; -fx-background-radius: 10px; -fx-padding: 16px 32px; -fx-cursor: hand;");
 
         navLinks.getChildren().addAll(navBeranda, navJurnal, navKalender, btnTulis);
-        navBar.getChildren().addAll(logo, searchBar, spacer, navLinks);
+        navBar.getChildren().addAll(logoBox, searchContainer, spacer, navLinks);
         root.setTop(navBar);
 
         // ==========================================
         // 2. KONTEN UTAMA (Center)
         // ==========================================
-        VBox content = new VBox(20);
-        content.setStyle("-fx-background-color: #FFFFFF;");
-        // Memberikan padding yang besar di kiri-kanan agar berada di tengah
-        content.setPadding(new Insets(40, 180, 60, 180)); 
+        AnchorPane mainAnchor = new AnchorPane();
+        mainAnchor.setStyle("-fx-background-color: white;");
+        
+        VBox content = new VBox(32);
+        content.setPadding(new Insets(143 - 115, 363, 60, 363)); // Adjusted for ScrollPane relative to navbar
+        content.setPrefWidth(1193 + 363 * 2); // Matching design width
 
         // Baris 1: Status & Aksi
         HBox row1 = new HBox();
         row1.setAlignment(Pos.CENTER_LEFT);
+        row1.setPrefWidth(1194);
         
         Label statusLbl = new Label("Draft");
-        statusLbl.setTextFill(Color.web("#757575"));
-        statusLbl.setFont(Font.font("System", FontWeight.BOLD, 18));
+        statusLbl.setTextFill(Color.web("#434343"));
+        statusLbl.setFont(Font.font("Outfit", FontWeight.NORMAL, 40));
 
         Region spacerRow1 = new Region();
         HBox.setHgrow(spacerRow1, Priority.ALWAYS);
 
         Button btnPost = new Button("Post");
-        btnPost.setStyle("-fx-background-color: #FFD54F; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 20px; -fx-padding: 8px 30px; -fx-cursor: hand;");
+        btnPost.setStyle("-fx-background-color: #FFE341; -fx-text-fill: black; -fx-font-family: 'Outfit'; -fx-font-size: 30px; -fx-background-radius: 100px; -fx-padding: 8px 32px; -fx-cursor: hand;");
         btnPost.setOnAction(e -> handlePost());
 
-        // Dummy Profile Picture menggunakan Circle
-        Circle profilePic = new Circle(20, Color.web("#E0E0E0")); 
+        ImageView profilePic = new ImageView(new Image("https://ui-avatars.com/api/?name=" + user.getFullName() + "&background=8D1395&color=fff", true)); 
+        profilePic.setFitWidth(60);
+        profilePic.setFitHeight(60);
+        Circle clip = new Circle(30, 30, 30);
+        profilePic.setClip(clip);
 
-        HBox actionBox = new HBox(15, btnPost, profilePic);
+        HBox actionBox = new HBox(16, btnPost, profilePic);
         actionBox.setAlignment(Pos.CENTER);
         row1.getChildren().addAll(statusLbl, spacerRow1, actionBox);
 
         // Baris 2: Judul
         titleField = new TextField();
         titleField.setPromptText("Judul");
-        titleField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: #333333; -fx-padding: 10px 0px;");
-        titleField.setFont(Font.font("System", FontWeight.BOLD, 40));
+        titleField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-prompt-text-fill: rgba(0,0,0,0.20); -fx-padding: 0px;");
+        titleField.setFont(Font.font("Outfit", FontWeight.MEDIUM, 75));
 
         // Baris 3: Kategori
-        VBox row3 = new VBox(8);
+        VBox row3 = new VBox(16);
         Label catLbl = new Label("Kategori");
-        catLbl.setFont(Font.font("System", FontWeight.BOLD, 14));
+        catLbl.setFont(Font.font("Outfit", FontWeight.NORMAL, 30));
         catCombo = new ComboBox<>();
         catCombo.setPromptText("Pilih Kategori");
         catCombo.getItems().addAll("Pekerjaan", "Keluarga", "Pendidikan", "Kesehatan");
         catCombo.setMaxWidth(Double.MAX_VALUE);
-        catCombo.setStyle("-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 20px; -fx-background-radius: 20px; -fx-padding: 5px 10px;");
+        catCombo.setStyle("-fx-background-color: white; -fx-border-color: rgba(0,0,0,0.20); -fx-border-radius: 100px; -fx-background-radius: 100px; -fx-padding: 16px 24px; -fx-font-family: 'Outfit'; -fx-font-size: 20px;");
         row3.getChildren().addAll(catLbl, catCombo);
 
         // Baris 4: Penyebab
-        VBox row4 = new VBox(8);
+        VBox row4 = new VBox(16);
         Label causeLbl = new Label("Penyebab");
-        causeLbl.setFont(Font.font("System", FontWeight.BOLD, 14));
+        causeLbl.setFont(Font.font("Outfit", FontWeight.NORMAL, 30));
         causeField = new TextField();
         causeField.setPromptText("Tulis Penyebab");
-        causeField.setStyle("-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 20px; -fx-background-radius: 20px; -fx-padding: 12px 15px;");
+        causeField.setStyle("-fx-background-color: white; -fx-border-color: rgba(0,0,0,0.20); -fx-border-radius: 100px; -fx-background-radius: 100px; -fx-padding: 16px 24px; -fx-font-family: 'Outfit'; -fx-font-size: 20px;");
         row4.getChildren().addAll(causeLbl, causeField);
 
         // Baris 5: Area Tulis Jurnal
-        HBox row5 = new HBox(15);
-        Button btnImage = new Button("📷");
-        btnImage.setShape(new Circle(25));
-        btnImage.setMinSize(50, 50);
-        btnImage.setMaxSize(50, 50);
-        btnImage.setStyle("-fx-background-color: #F5F5F5; -fx-text-fill: #888888; -fx-font-size: 20px; -fx-cursor: hand;");
-        btnImage.setOnAction(e -> handleUploadImage());
-
         writeArea = new TextArea();
         writeArea.setPromptText("Tulis ceritamu hari ini!");
-        writeArea.setStyle("-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-border-color: transparent; -fx-font-size: 16px;");
-        writeArea.setPrefHeight(200);
+        writeArea.setStyle("-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-border-color: transparent; -fx-font-family: 'Outfit'; -fx-font-size: 30px; -fx-font-weight: 400; -fx-text-fill: #434343;");
+        writeArea.setPrefHeight(150);
         writeArea.setWrapText(true);
-        HBox.setHgrow(writeArea, Priority.ALWAYS); // Memenuhi sisa ruang
-        
-        row5.getChildren().addAll(btnImage, writeArea);
 
         // Baris 6: Card Target Hari Ini
-        VBox row6 = new VBox(15);
-        row6.setStyle("-fx-border-color: #E0E0E0; -fx-border-radius: 10px; -fx-padding: 20px;");
+        VBox row6 = new VBox(16);
+        row6.setPadding(new Insets(28));
+        row6.setStyle("-fx-background-color: white; -fx-border-color: #D6D6D6; -fx-border-radius: 20px; -fx-background-radius: 20px;");
         
-        HBox targetTop = new HBox(15);
-        targetTop.setAlignment(Pos.CENTER_LEFT);
-        Circle targetCircle = new Circle(22, Color.web("#F5F5F5"));
+        HBox targetHeader = new HBox(16);
+        targetHeader.setAlignment(Pos.CENTER_LEFT);
+        Circle targetCircle = new Circle(35, Color.web("#D9D9D9"));
         
-        VBox targetTexts = new VBox(5);
-        Label targetTitle = new Label("Target Hari Ini");
-        targetTitle.setFont(Font.font("System", FontWeight.BOLD, 16));
-        Label targetDesc = new Label("Kamu belum ada target apapun, nih!");
-        targetDesc.setTextFill(Color.web("#9E9E9E"));
-        targetTexts.getChildren().addAll(targetTitle, targetDesc);
+        VBox targetTexts = new VBox(4);
+        Label targetTitleLabel = new Label("Target Hari Ini");
+        targetTitleLabel.setFont(Font.font("Outfit", FontWeight.MEDIUM, 30));
+        targetTitleLabel.setTextFill(Color.web("#292929"));
+        Label targetDesc = new Label("Peluk dirimu dengan kegiatan ini!");
+        targetDesc.setTextFill(Color.web("#434343"));
+        targetDesc.setFont(Font.font("Outfit", FontWeight.LIGHT, 20));
+        targetTexts.getChildren().addAll(targetTitleLabel, targetDesc);
         
-        targetTop.getChildren().addAll(targetCircle, targetTexts);
+        targetHeader.getChildren().addAll(targetCircle, targetTexts);
 
-        Label btnAddTarget = new Label("+ Tambah Target");
-        btnAddTarget.setTextFill(Color.web("#9E9E9E"));
-        btnAddTarget.setStyle("-fx-cursor: hand; -fx-font-weight: bold;");
-        btnAddTarget.setOnMouseClicked(e -> handleAddTarget());
+        VBox targetsList = new VBox(8);
+        targetsList.getChildren().addAll(
+            createTargetItem("Target 1", true),
+            createTargetItem("Target 2", true),
+            createTargetItem("Target 3", false),
+            createTargetItem("Target 4", false)
+        );
 
-        row6.getChildren().addAll(targetTop, btnAddTarget);
+        row6.getChildren().addAll(targetHeader, targetsList);
 
-        // Susun semua komponen di dalam container
-        content.getChildren().addAll(row1, titleField, row3, row4, row5, row6);
+        content.getChildren().addAll(row1, titleField, row3, row4, writeArea, row6);
+        
+        // Floating Camera Button
+        Button btnCamera = new Button();
+        btnCamera.setShape(new Circle(32.5));
+        btnCamera.setMinSize(65, 65);
+        btnCamera.setMaxSize(65, 65);
+        btnCamera.setStyle("-fx-background-color: white; -fx-border-color: #D6D6D6; -fx-border-radius: 32.5; -fx-background-radius: 32.5; -fx-cursor: hand;");
+        
+        ImageView camIcon = new ImageView(new Image("file:img/icons/more.png")); // Placeholder
+        camIcon.setFitWidth(32);
+        camIcon.setFitHeight(32);
+        btnCamera.setGraphic(camIcon);
+        
+        AnchorPane.setLeftAnchor(btnCamera, 271.0);
+        AnchorPane.setTopAnchor(btnCamera, 631.0 - 115); // Offset by navbar
 
-        // Bungkus content dengan ScrollPane
-        ScrollPane scrollPane = new ScrollPane(content);
+        mainAnchor.getChildren().addAll(content, btnCamera);
+
+        ScrollPane scrollPane = new ScrollPane(mainAnchor);
         scrollPane.setFitToWidth(true);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Sembunyikan scroll horizontal
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setStyle("-fx-background: white; -fx-border-color: transparent;");
 
         root.setCenter(scrollPane);
@@ -184,9 +222,33 @@ public class EntryFormView {
         return root;
     }
 
-    // ==========================================
-    // 3. DUMMY METHODS (Aksi Tombol)
-    // ==========================================
+    private HBox createTargetItem(String text, boolean completed) {
+        HBox item = new HBox();
+        item.setPrefHeight(40);
+        item.setAlignment(Pos.CENTER_LEFT);
+        Label label = new Label(text);
+        label.setFont(Font.font("Outfit", FontWeight.LIGHT, 25));
+        label.setTextFill(Color.BLACK);
+        if (completed) {
+            label.setStyle("-fx-text-decoration: line-through;");
+        }
+        
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        
+        if (completed) {
+            Circle dot = new Circle(17.5, Color.web("#82DD55"));
+            item.getChildren().addAll(label, spacer, dot);
+        } else {
+            Circle dot = new Circle(17.5, Color.TRANSPARENT);
+            dot.setStroke(Color.web("#82DD55"));
+            dot.setStrokeWidth(2);
+            item.getChildren().addAll(label, spacer, dot);
+        }
+        
+        return item;
+    }
+
     private void handlePost() {
         System.out.println("Tombol Post ditekan! Menyimpan jurnal ke database...");
 
@@ -201,18 +263,10 @@ public class EntryFormView {
         entry.setTime(LocalTime.now());
         entry.setUserId(user.getId());
 
-        controller.addEntry(entry); // Simpan ke database
+        controller.addEntry(entry);
 
         if (onPostSuccess != null) {
-            onPostSuccess.run(); // Alihkan layar via callback
+            onPostSuccess.run();
         }
-    }
-
-    private void handleUploadImage() {
-        System.out.println("Membuka FileChooser untuk memilih foto jurnal...");
-    }
-
-    private void handleAddTarget() {
-        System.out.println("Memunculkan modal untuk menambahkan target baru...");
     }
 }
