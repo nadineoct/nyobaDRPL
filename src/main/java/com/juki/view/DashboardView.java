@@ -54,9 +54,9 @@ public class DashboardView {
         greetingText.setFont(Font.font("Outfit", FontWeight.MEDIUM, 50));
         
         Label emojiLabel = new Label("\uD83E\uDD14"); // Thinking Face 🤔
-        emojiLabel.setFont(Font.font(50));
         // Fallback font style for Linux/Windows/Mac emoji support
-        emojiLabel.setStyle("-fx-font-family: 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', 'sans-serif';");
+        emojiLabel.setStyle("-fx-font-size: 50px; -fx-font-family: 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', 'sans-serif';");
+        emojiLabel.setMinSize(Label.USE_PREF_SIZE, Label.USE_PREF_SIZE);
         
         greetingBox.getChildren().addAll(greetingText, emojiLabel);
 
