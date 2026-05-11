@@ -287,8 +287,9 @@ public class DashboardView {
 
         GridPane grid = new GridPane();
         grid.setHgap(20);
-        grid.setVgap(16); // Diperkecil agar kalender tidak terlalu memakan tempat
+        grid.setVgap(32); // Jarak vertikal yang pas agar memenuhi kotak 480px
         grid.setAlignment(Pos.CENTER);
+        VBox.setVgrow(grid, Priority.ALWAYS); // Memaksa grid mengisi sisa ruang vertikal ke bawah
 
         // State untuk melacak bulan yang sedang dilihat
         LocalDate[] currentMonth = { LocalDate.now().withDayOfMonth(1) };
@@ -329,7 +330,7 @@ public class DashboardView {
                         if (isCurrentMonth && day == today.getDayOfMonth()) {
                             d.setTextFill(Color.WHITE);
                             d.setFont(Font.font("Montserrat", FontWeight.BOLD, 20));
-                            Circle bg = new Circle(20, Color.web("#8D1395"));
+                            Circle bg = new Circle(20, Color.web("#F6CEFF"));
                             cell.getChildren().addAll(bg, d);
                         } else {
                             d.setTextFill(Color.web("#434343"));
