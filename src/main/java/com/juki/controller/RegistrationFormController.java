@@ -8,15 +8,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RegistrationFormController {
+
     public User signIn(String username, String password) {
-        String sqlSelect = "SELECT id, full_name FROM User WHERE username = ? AND password = ?";
+        String sqlSelect = "SELECT id, full_name, profile_image_path FROM User WHERE username = ? AND password = ?";
         try (Connection conn = DatabaseHelper.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sqlSelect)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new User(rs.getInt("id"), rs.getString("full_name"), username); // Berhasil sign in
+                return new User(rs.getInt("id"), rs.getString("full_name"), username, rs.getString("profile_image_path"));
             }
         } catch (SQLException e) {
             System.err.println("Error saat sign in: " + e.getMessage());
@@ -25,7 +26,7 @@ public class RegistrationFormController {
     }
 
     public User signUp(String fullName, String username, String password) {
-        String sqlInsert = "INSERT INTO User (full_name, username, password) VALUES (?, ?, ?)";
+        String sqlInsert = "INSERT INTO User (full_name, username, password, profile_image_path) VALUES (?, ?, ?, NULL)";
         try (Connection conn = DatabaseHelper.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sqlInsert, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, fullName);
@@ -35,7 +36,7 @@ public class RegistrationFormController {
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 int generatedId = rs.getInt(1);
-                return new User(generatedId, fullName, username);
+                return new User(generatedId, fullName, username, null);
             }
         } catch (SQLException e) {
             System.err.println("Error saat sign up (username mungkin sudah ada): " + e.getMessage());

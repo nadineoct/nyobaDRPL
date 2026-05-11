@@ -23,7 +23,8 @@ public class DatabaseHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "full_name TEXT NOT NULL," +
                 "username TEXT UNIQUE NOT NULL," +
-                "password TEXT NOT NULL" +
+                "password TEXT NOT NULL," +
+                "profile_image_path TEXT" +
                 ");";
 
         String sqlPhotoTable = "CREATE TABLE IF NOT EXISTS Photo (" +

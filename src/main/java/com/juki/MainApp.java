@@ -6,6 +6,8 @@ import com.juki.model.User;
 import com.juki.view.DashboardView;
 import com.juki.view.EntryFormView;
 import com.juki.view.EntryListView;
+import com.juki.view.ProfileView;
+import com.juki.model.UserSession;
 import com.juki.view.RegistrationFormView;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -30,6 +32,8 @@ public class MainApp extends Application {
 
     private void showLoginScreen(Stage primaryStage) {
         RegistrationFormView loginView = new RegistrationFormView(user -> {
+            // Simpan state user yang aktif ke dalam Session
+            UserSession.getInstance().setActiveUser(user);
             showMainDashboard(primaryStage, user);
         });
 
@@ -71,8 +75,42 @@ public class MainApp extends Application {
         
         Button btnTulis = new Button("✨ Tulis Jurnal");
         btnTulis.setStyle("-fx-background-color: white; -fx-text-fill: #A114AC; -fx-font-family: 'Outfit'; -fx-font-size: 25px; -fx-background-radius: 10px; -fx-padding: 10px 20px;");
+
+        // Avatar Profile Circle dinamis di Navbar
+        StackPane btnProfile = new StackPane();
+        javafx.scene.shape.Circle navAvatar = new javafx.scene.shape.Circle(25, Color.web("#FDF3FF"));
+        Label navAvatarInitial = new Label();
+        navAvatarInitial.setTextFill(Color.web("#8D1395"));
+        navAvatarInitial.setFont(Font.font("Outfit", FontWeight.BOLD, 22));
+        btnProfile.getChildren().addAll(navAvatar, navAvatarInitial);
+        btnProfile.setStyle("-fx-cursor: hand;");
+        btnProfile.setOnMouseEntered(e -> btnProfile.setOpacity(0.8));
+        btnProfile.setOnMouseExited(e -> btnProfile.setOpacity(1.0));
         
-        menuBox.getChildren().addAll(navBeranda, navJurnal, navKalendar, btnTulis);
+        Runnable updateNavAvatar = () -> {
+            User u = UserSession.getInstance().getActiveUser();
+            if (u != null) {
+                boolean hasImage = false;
+                if (u.getProfileImagePath() != null && !u.getProfileImagePath().isEmpty()) {
+                    try {
+                        java.io.File f = new java.io.File(u.getProfileImagePath());
+                        if (f.exists()) {
+                            navAvatar.setFill(new javafx.scene.paint.ImagePattern(new javafx.scene.image.Image(f.toURI().toString())));
+                            navAvatarInitial.setVisible(false);
+                            hasImage = true;
+                        }
+                    } catch (Exception ex) { }
+                }
+                if (!hasImage) {
+                    navAvatar.setFill(Color.web("#FDF3FF"));
+                    navAvatarInitial.setText(u.getFullName().substring(0, 1).toUpperCase());
+                    navAvatarInitial.setVisible(true);
+                }
+            }
+        };
+        updateNavAvatar.run(); // Load avatar awal
+
+        menuBox.getChildren().addAll(navBeranda, navJurnal, navKalendar, btnTulis, btnProfile);
         
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -107,6 +145,17 @@ public class MainApp extends Application {
                 root.setCenter(entryListView.getView());
             });
             root.setCenter(entryFormView.getView().getCenter()); // Mengambil kontennya saja tanpa duplikasi navbar
+        });
+
+        btnProfile.setOnMouseClicked(e -> {
+            navBeranda.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
+            navJurnal.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
+            
+            ProfileView profileView = new ProfileView(user, () -> {
+                // Hapus panel utama dan panggil halaman login ulang (Logout)
+                showLoginScreen(primaryStage);
+            }, updateNavAvatar);
+            root.setCenter(profileView.getView());
         });
 
         // Panggil View Beranda (Dashboard)
