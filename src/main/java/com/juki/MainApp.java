@@ -49,21 +49,26 @@ public class MainApp extends Application {
         
         // Top Navigation Bar
         HBox navBar = new HBox();
-        navBar.setStyle("-fx-background-color: " + DesignSystem.VIOLET_800 + "; -fx-padding: 20px 100px;");
+        navBar.setStyle("-fx-background-color: " + DesignSystem.VIOLET_800 + "; -fx-padding: 42px 100px;");
         navBar.setAlignment(Pos.CENTER_LEFT);
 
         ImageView logo = new ImageView();
         try {
-            logo.setImage(new javafx.scene.image.Image("file:img/beranda/logo (3).png"));
+            logo.setImage(new javafx.scene.image.Image("file:img/beranda/logo.png"));
             logo.setFitHeight(50);
             logo.setPreserveRatio(true);
         } catch (Exception e) {
             System.err.println("Could not load logo: " + e.getMessage());
         }
         
+        Rectangle divider = new Rectangle(7, 35);
+        divider.setFill(Color.web("#FAE7FF"));
+        divider.setArcWidth(0.18);
+        divider.setArcHeight(0.18);
+
         HBox logoBox = new HBox(32);
         logoBox.setAlignment(Pos.CENTER_LEFT);
-        logoBox.getChildren().addAll(logo);
+        logoBox.getChildren().addAll(logo, divider);
         
         HBox menuBox = new HBox(64);
         menuBox.setAlignment(Pos.CENTER);
@@ -129,12 +134,8 @@ public class MainApp extends Application {
         });
 
         navKalendar.setOnMouseClicked(e -> {
-            navKalendar.setFont(Font.font("Outfit", FontWeight.SEMI_BOLD, 25));
-            navBeranda.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
-            navJurnal.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
-            btnNavbarAction.setText("Tambah Self-Care");
-            CalendarView calendarView = new CalendarView(user);
-            root.setCenter(calendarView.getView());
+            // Calendar is currently disabled
+            System.out.println("Fitur Kalendar sedang dalam pengembangan!");
         });
         
         btnNavbarAction.setOnAction(e -> {
@@ -151,7 +152,7 @@ public class MainApp extends Application {
                 });
                 root.setCenter(entryFormView.getView().getCenter());
             } else {
-                System.out.println("Aksi Tambah Self-Care dipicu!");
+                System.out.println("Aksi dipicu!");
             }
         });
 

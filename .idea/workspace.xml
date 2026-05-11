@@ -4,7 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="afa801b1-7da9-414d-9389-30a97c69472c" name="Changes" comment="" />
+    <list default="true" id="afa801b1-7da9-414d-9389-30a97c69472c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/beranda/logo (3).png" beforeDir="false" afterPath="$PROJECT_DIR$/img/beranda/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/juki/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/juki/MainApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/juki/view/CalendarView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/juki/view/DashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/juki/view/DashboardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/MainApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/MainApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/controller/EntryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/controller/EntryController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/controller/GoalController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/controller/GoalController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/controller/RegistrationFormController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/controller/RegistrationFormController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/dao/JournalEntryDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/dao/JournalEntryDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/dao/UserDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/view/DashboardView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/view/DashboardView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/view/EntryDetailView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/view/EntryDetailView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/view/EntryFormView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/view/EntryFormView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/view/EntryListView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/view/EntryListView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/view/EntryManagerView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/view/EntryManagerView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/juki/view/RegistrationFormView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/juki/view/RegistrationFormView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,6 +59,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.MainApp.executor": "Run",
+    "Maven.juki-desktop [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",

@@ -1,0 +1,4 @@
+com\juki\model\User.class
+com\juki\model\Photo.class
+com\juki\model\SelfCareGoal.class
+com\juki\model\SearchFilter.class

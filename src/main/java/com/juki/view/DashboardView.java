@@ -43,42 +43,44 @@ public class DashboardView {
         GoalController goalController = new GoalController();
         List<SelfCareGoal> todayGoals = goalController.getGoalsByDate(LocalDate.now());
 
-        VBox content = new VBox(48);
-        content.setPadding(new Insets(52, 100, 52, 100));
+        VBox content = new VBox(32);
+        content.setPadding(new Insets(32, 60, 32, 60));
         content.setStyle("-fx-background-color: white;");
 
         // Row 1: Greeting
         HBox greetingBox = new HBox(5);
         greetingBox.setAlignment(Pos.CENTER_LEFT);
         Label greetingText = new Label("Halo, " + user.getFullName() + "!  Gimana perasaanmu hari ini? ");
-        greetingText.setTextFill(DesignSystem.getLemon(900));
-        greetingText.setFont(Font.font("Outfit", FontWeight.MEDIUM, 50));
+        greetingText.setTextFill(Color.web("#74400F"));
+        greetingText.setFont(Font.font("Outfit", FontWeight.MEDIUM, 40));
         
         ImageView emojiImage = new ImageView(new Image("file:img/emojis/thinking-face.png"));
-        emojiImage.setFitWidth(50);
-        emojiImage.setFitHeight(50);
+        emojiImage.setFitWidth(40);
+        emojiImage.setFitHeight(40);
         emojiImage.setPreserveRatio(true);
 
         greetingBox.getChildren().addAll(greetingText, emojiImage);
-        // Row 2: Streak, Graph, Calendar, Mood Selector
-        HBox row2 = new HBox(40);
+        // Row 2: Streak, Graph, Mood Selector
+        HBox row2 = new HBox(32);
         row2.setAlignment(Pos.BOTTOM_LEFT);
+        row2.setMaxWidth(1480);
 
         // Column 1: Streak + Mood Graph
         VBox col1 = new VBox(10);
-        col1.setPrefWidth(689);
+        col1.setPrefWidth(600);
         col1.getChildren().addAll(createStreakWidget(entries), createMoodGraphWidget(entries));
 
-        // Column 2: Calendar
-        VBox col2 = createCalendarWidget();
+        Region middleSpacer = new Region();
+        HBox.setHgrow(middleSpacer, Priority.ALWAYS);
 
         // Column 3: Mood Selector
         VBox col3 = createMoodSelectorWidget();
+        col3.setPrefWidth(500);
 
-        row2.getChildren().addAll(col1, col2, col3);
+        row2.getChildren().addAll(col1, middleSpacer, col3);
 
         // Row 3: Journal History + Daily Targets
-        HBox row3 = new HBox(64);
+        HBox row3 = new HBox(48);
         row3.setAlignment(Pos.TOP_LEFT);
 
         VBox journalHistory = createJournalHistoryWidget(entries);
@@ -98,6 +100,8 @@ public class DashboardView {
     private HBox createStreakWidget(List<JournalEntry> entries) {
         HBox container = new HBox(56);
         container.setPrefSize(689, 137);
+        container.setMinSize(689, 137);
+        container.setMaxSize(689, 137);
         container.setPadding(new Insets(32));
         container.setStyle("-fx-background-color: white; -fx-border-color: #D6D6D6; -fx-border-radius: 20px; -fx-background-radius: 20px;");
         container.setAlignment(Pos.CENTER);
@@ -177,6 +181,7 @@ public class DashboardView {
     private VBox createMoodGraphWidget(List<JournalEntry> entries) {
         VBox container = new VBox(8);
         container.setPadding(new Insets(28));
+        container.setPrefWidth(689);
         container.setStyle("-fx-background-color: white; -fx-border-color: " + DesignSystem.NEUTRAL_300 + "; -fx-border-radius: 20px; -fx-background-radius: 20px;");
         
         HBox header = new HBox();
@@ -253,105 +258,6 @@ public class DashboardView {
         }
 
         container.getChildren().addAll(header, chart, daysRow);
-        return container;
-    }
-
-    private LocalDate viewedMonthDate = LocalDate.now().withDayOfMonth(1);
-
-    private VBox createCalendarWidget() {
-        VBox container = new VBox(40);
-        container.setPrefSize(500, 500);
-        container.setPadding(new Insets(28));
-        container.setStyle("-fx-background-color: white; -fx-border-color: " + DesignSystem.NEUTRAL_300 + "; -fx-border-radius: 20px; -fx-background-radius: 20px;");
-        container.setAlignment(Pos.TOP_CENTER);
-
-        HBox header = new HBox();
-        header.setAlignment(Pos.CENTER);
-        
-        javafx.scene.effect.ColorAdjust arrowColor = new javafx.scene.effect.ColorAdjust();
-        arrowColor.setBrightness(0.65); // Matching #A5A5A5
-
-        Label monthLabel = new Label();
-        monthLabel.setFont(Font.font("Outfit", FontWeight.NORMAL, 25));
-        monthLabel.setTextFill(Color.web(DesignSystem.NEUTRAL_900));
-
-        GridPane grid = new GridPane();
-        grid.setHgap(32);
-        grid.setVgap(40);
-        grid.setAlignment(Pos.CENTER);
-
-        Runnable updateCalendar = () -> {
-            monthLabel.setText(viewedMonthDate.getMonth().getDisplayName(java.time.format.TextStyle.FULL, new Locale("id", "ID")) + " " + viewedMonthDate.getYear());
-            
-            grid.getChildren().clear();
-            String[] headers = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
-            for (int i = 0; i < 7; i++) {
-                Label h = new Label(headers[i]);
-                h.setFont(Font.font("Montserrat", FontWeight.MEDIUM, 16));
-                h.setTextFill(Color.web(DesignSystem.NEUTRAL_500));
-                grid.add(h, i, 0);
-            }
-
-            int dayOfWeek = viewedMonthDate.getDayOfWeek().getValue() % 7;
-            int daysInMonth = viewedMonthDate.lengthOfMonth();
-
-            int day = 1;
-            LocalDate today = LocalDate.now();
-            for (int row = 1; row <= 6; row++) {
-                for (int col = 0; col < 7; col++) {
-                    if (row == 1 && col < dayOfWeek) continue;
-                    if (day <= daysInMonth) {
-                        Label d = new Label(String.valueOf(day));
-                        d.setFont(Font.font("Montserrat", FontWeight.NORMAL, 20));
-                        
-                        boolean isToday = today.getYear() == viewedMonthDate.getYear() && 
-                                          today.getMonth() == viewedMonthDate.getMonth() && 
-                                          today.getDayOfMonth() == day;
-                        
-                        d.setTextFill(isToday ? DesignSystem.getViolet(800) : Color.web(DesignSystem.NEUTRAL_800));
-                        if (isToday) d.setFont(Font.font("Montserrat", FontWeight.BOLD, 20));
-                        
-                        d.setMinWidth(40);
-                        d.setAlignment(Pos.CENTER);
-                        grid.add(d, col, row);
-                        day++;
-                    }
-                }
-            }
-        };
-
-        ImageView btnPrev = new ImageView(new Image("file:img/icons/arrow-left.png"));
-        btnPrev.setFitWidth(32);
-        btnPrev.setPreserveRatio(true);
-        btnPrev.setPickOnBounds(true);
-        btnPrev.setStyle("-fx-cursor: hand;");
-        btnPrev.setEffect(arrowColor);
-        btnPrev.setOnMouseClicked(e -> {
-            viewedMonthDate = viewedMonthDate.minusMonths(1).withDayOfMonth(1);
-            System.out.println("Navigating to previous month: " + viewedMonthDate);
-            updateCalendar.run();
-        });
-        
-        Region s1 = new Region(); HBox.setHgrow(s1, Priority.ALWAYS);
-        Region s2 = new Region(); HBox.setHgrow(s2, Priority.ALWAYS);
-        
-        ImageView btnNext = new ImageView(new Image("file:img/icons/arrow-right.png"));
-        btnNext.setFitWidth(32);
-        btnNext.setPreserveRatio(true);
-        btnNext.setPickOnBounds(true);
-        btnNext.setStyle("-fx-cursor: hand;");
-        btnNext.setEffect(arrowColor);
-        btnNext.setOnMouseClicked(e -> {
-            viewedMonthDate = viewedMonthDate.plusMonths(1).withDayOfMonth(1);
-            System.out.println("Navigating to next month: " + viewedMonthDate);
-            updateCalendar.run();
-        });
-        
-        header.getChildren().addAll(btnPrev, s1, monthLabel, s2, btnNext);
-
-        updateCalendar.run();
-
-        container.getChildren().addAll(header, grid);
         return container;
     }
 
@@ -483,6 +389,7 @@ public class DashboardView {
         title.setTextFill(Color.web("#292929"));
 
         HBox cards = new HBox(18);
+        cards.setAlignment(Pos.CENTER_LEFT);
         if (entries.isEmpty()) {
             Label empty = new Label("Belum ada jurnal. Yuk mulai menulis!");
             empty.setFont(Font.font("Outfit", 20));
@@ -497,6 +404,25 @@ public class DashboardView {
                 ));
             }
         }
+        
+        // Add next button circle
+        StackPane nextBtn = new StackPane();
+        nextBtn.setPrefSize(50, 50);
+        nextBtn.setMinSize(50, 50);
+        nextBtn.setMaxSize(50, 50);
+        nextBtn.setStyle("-fx-background-color: " + DesignSystem.LEMON_100 + "; -fx-background-radius: 25px; -fx-cursor: hand;");
+        
+        try {
+            ImageView arrowIcon = new ImageView(new Image("file:img/icons/arrow-right.png"));
+            arrowIcon.setFitWidth(24);
+            arrowIcon.setPreserveRatio(true);
+            javafx.scene.effect.ColorAdjust brownColor = new javafx.scene.effect.ColorAdjust();
+            brownColor.setBrightness(-0.4);
+            arrowIcon.setEffect(brownColor);
+            nextBtn.getChildren().add(arrowIcon);
+        } catch (Exception e) {}
+
+        cards.getChildren().add(nextBtn);
 
         container.getChildren().addAll(title, cards);
         return container;
